@@ -7,7 +7,7 @@
     "tasks": [
         {
             "taskName": "build all",
-            "command": "./make all -j4",
+            "command": "make all -j4",
             "problemMatcher": [
                 "$gcc"
             ],

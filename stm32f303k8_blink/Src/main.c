@@ -100,6 +100,8 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+    HAL_Delay();
+    HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
 
   }
   /* USER CODE END 3 */
