@@ -1,5 +1,5 @@
-Src/main.o: ../Src/main.c \
- C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Inc/main.h \
+Src/fonts.o: ../Src/fonts.c \
+ C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Inc/fonts.h \
  C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal.h \
  C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Inc/stm32f0xx_hal_conf.h \
  C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Inc/main.h \
@@ -23,12 +23,9 @@ Src/main.o: ../Src/main.c \
  C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_i2c.h \
  C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_i2c_ex.h \
  C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr.h \
- C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h \
- C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Inc/ssd1306.h \
- C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Inc/fonts.h \
- C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Inc/fonts.h
+ C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h
 
-C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Inc/main.h:
+C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Inc/fonts.h:
 
 C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal.h:
 
@@ -77,9 +74,3 @@ C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Drivers/STM32F0xx_HAL_Driver/
 C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr.h:
 
 C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h:
-
-C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Inc/ssd1306.h:
-
-C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Inc/fonts.h:
-
-C:/Users/—I‰î/Documents/STM32CUBE_code/stm32f042k6/Inc/fonts.h:
