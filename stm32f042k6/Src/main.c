@@ -47,8 +47,17 @@
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 
+TIM_HandleTypeDef htim1;
+
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+#define mC 261.626
+#define mD 293.665
+#define mE 329.628
+#define mF 349.228
+#define mG 391.995
+#define mA 440.000
+#define mB 493.883
 
 /* USER CODE END PV */
 
@@ -56,6 +65,10 @@ I2C_HandleTypeDef hi2c1;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_TIM1_Init(void);
+                                    
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+                                
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -63,13 +76,17 @@ static void MX_I2C1_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-
+TIM_MasterConfigTypeDef sMasterConfig;
+TIM_OC_InitTypeDef sConfigOC;
+ 
 /* USER CODE END 0 */
 
 int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+  float mm[] = {mC, mD, mE, mF, mG, mA, mB, mC*2};
+  int i;
 
   /* USER CODE END 1 */
 
@@ -92,6 +109,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C1_Init();
+  MX_TIM1_Init();
 
   /* USER CODE BEGIN 2 */
   ssd1306_Init();
@@ -109,14 +127,6 @@ int main(void)
 
   ssd1306_UpdateScreen();
 
-  HAL_Delay(1000);
-
-  ssd1306_Fill(Black);
-  ssd1306_SetCursor(23, 23);
-  ssd1306_WriteString("Oppai", Font_11x18, White);
-
-  ssd1306_UpdateScreen();
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -126,6 +136,36 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+    for(i=0; i<sizeof(mm)/sizeof(float); i++){
+      sConfigOC.Pulse = mm[i];
+      if(HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK){
+        Error_Handler();
+      }
+      if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK){
+        Error_Handler();
+      }
+      HAL_Delay(1000);
+    }
+    /*
+    sConfigOC.Pulse = 100;
+    if(HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK){
+      Error_Handler();
+    }
+    if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK){
+      Error_Handler();
+    }
+    HAL_Delay(1000);
+
+    sConfigOC.Pulse = 999;
+    if(HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK){
+      Error_Handler();
+    }
+    if(HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK){
+      Error_Handler();
+    }
+    HAL_Delay(1000);
+    */
+
     //HAL_Delay(1000);
 	  //HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
 
@@ -220,6 +260,61 @@ static void MX_I2C1_Init(void)
 
 }
 
+/* TIM1 init function */
+static void MX_TIM1_Init(void)
+{
+
+  //TIM_MasterConfigTypeDef sMasterConfig;
+  //TIM_OC_InitTypeDef sConfigOC;
+  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig;
+
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 3;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 999;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
+  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+  sBreakDeadTimeConfig.DeadTime = 0;
+  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+  if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+  HAL_TIM_MspPostInit(&htim1);
+
+}
+
 /** Configure pins as 
         * Analog 
         * Input 
@@ -234,6 +329,7 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOF_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
